@@ -98,9 +98,6 @@ void BindPlace(pybind11::module* m) {
              new (&self) lt::Place(target, precision, layout, device);
            })
       .def("is_valid", &lt::Place::is_valid,
-           pybind11::return_value_policy::reference)
-      .def("hash", &lt::Place::hash, pybind11::return_value_policy::reference)
-      .def("DebugString", &lt::Place::DebugString,
            pybind11::return_value_policy::reference);
 }
 

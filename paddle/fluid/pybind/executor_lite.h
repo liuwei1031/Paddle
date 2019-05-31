@@ -15,7 +15,6 @@ limitations under the License. */
 
 #include <Python.h>
 
-// #include "paddle/fluid/platform/enforce.h"
 #include "pybind11/pybind11.h"
 
 namespace paddle {
