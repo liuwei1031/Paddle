@@ -50,6 +50,11 @@ class Predictor {
   // Run the predictor for a single batch of data.
   void Run() { program_->Run(); }
 
+  void Run(const std::vector<framework::Tensor>& tensors) {
+    FeedVars(tensors);
+    program_->Run();
+  }
+
   // Get offset-th col of feed inputs.
   lite::Tensor* GetInput(size_t offset);
 
@@ -62,6 +67,8 @@ class Predictor {
 
   // This method is disabled in mobile, for unnecessary dependencies required.
   void SaveModel(const std::string& dir);
+
+  void FeedVars(const std::vector<framework::Tensor>& tensors);
 
  private:
   Optimizer optimizer_;
@@ -99,10 +106,20 @@ class CXXTrainer {
   // Build the RuntimeProgram cache for the main program. The cache will run
   // multiple times for the epoches.
   // NOTE Just support to execute the 0-th block currently.
-  Predictor& BuildMainProgramExecutor(const framework::proto::ProgramDesc& desc,
-                                      int block_id = 0) {
-    main_program_executor_.Build(desc, preferred_place_, valid_places_);
+  ExecutorLite& BuildMainProgramExecutor(
+      const framework::proto::ProgramDesc& desc, int block_id = 0) {
+    scope_->Var("feed")->GetMutable<std::vector<lite::Tensor>>();
+    main_program_executor_.Build(desc, preferred_place_, valid_places_, true);
     return main_program_executor_;
+  }
+
+  ExecutorLite& BuildMainProgramExecutor(
+      framework::ProgramDesc& desc) {  // NOLINT
+    return BuildMainProgramExecutor(*desc.Proto());
+  }
+
+  void RunStartupProgram(framework::ProgramDesc& desc) {  // NOLINT
+    RunStartupProgram(*desc.Proto());
   }
 
   // Run the startup program. It just executes once, no cache needed.

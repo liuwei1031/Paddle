@@ -90,15 +90,20 @@ bool MulGradOpLite::InferShape() const {
 bool MulGradOpLite::AttachImpl(const cpp::OpDesc &op_desc, lite::Scope *scope) {
   auto X_name = op_desc.Input("X").front();
   auto Y_name = op_desc.Input("Y").front();
-  auto Out_grad_name = op_desc.Output(framework::GradVarName("Out")).front();
-  auto X_grad_name = op_desc.Output(framework::GradVarName("X")).front();
-  auto Y_grad_name = op_desc.Output(framework::GradVarName("Y")).front();
+  auto Out_grad_name = op_desc.Input(framework::GradVarName("Out")).front();
+
+  if (op_desc.Output(framework::GradVarName("X")).size()) {
+    auto X_grad_name = op_desc.Output(framework::GradVarName("X")).front();
+    param_.x_grad = GetMutableVar<lite::Tensor>(scope, X_grad_name);
+  }
+  if (op_desc.Output(framework::GradVarName("Y")).size()) {
+    auto Y_grad_name = op_desc.Output(framework::GradVarName("Y")).front();
+    param_.y_grad = GetMutableVar<lite::Tensor>(scope, Y_grad_name);
+  }
 
   param_.x = GetVar<lite::Tensor>(scope, X_name);
   param_.y = GetVar<lite::Tensor>(scope, Y_name);
   param_.output_grad = GetVar<lite::Tensor>(scope, Out_grad_name);
-  param_.x_grad = GetMutableVar<lite::Tensor>(scope, X_grad_name);
-  param_.y_grad = GetMutableVar<lite::Tensor>(scope, Y_grad_name);
 
   return true;
 }
@@ -109,3 +114,4 @@ bool MulGradOpLite::AttachImpl(const cpp::OpDesc &op_desc, lite::Scope *scope) {
 }  // namespace paddle
 
 REGISTER_LITE_OP(mul, paddle::lite::operators::MulOpLite);
+REGISTER_LITE_OP(mul_grad, paddle::lite::operators::MulGradOpLite);

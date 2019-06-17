@@ -367,6 +367,7 @@ PYBIND11_MODULE(core, m) {
       .def("set", PyCUDAPinnedTensorSetFromArray<int8_t>)
 #endif
       .def("shape", [](Tensor &self) { return vectorize(self.dims()); })
+      .def("memory_size", [](Tensor &self) { return self.memory_size(); })
       .def("_set_float_element", TensorSetElement<float>)
       .def("_get_float_element", TensorGetElement<float>)
       .def("_set_double_element", TensorSetElement<double>)

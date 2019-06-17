@@ -113,7 +113,13 @@ if (WITH_TESTING)
     add_dependencies(test_paddle_api_lite test_apis_lite)
 endif()
 
-#lite_cc_binary(cxx_api_lite_bin SRCS cxx_api_bin.cc
-    #X86_DEPS operator
-    #DEPS light_api_lite model_parser_lite target_wrapper_host mir_passes
-    #ARM_DEPS ${arm_kernels})
+lite_cc_binary(cxx_api_lite_bin SRCS cxx_api_bin.cc
+    DEPS
+    cxx_api_lite
+    model_parser_lite
+    target_wrapper_host
+    mir_passes
+    operator
+    ${ops_lite} ${host_kernels}
+    ARM_DEPS ${arm_kernels})
+ 

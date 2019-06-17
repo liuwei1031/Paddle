@@ -1,11 +1,15 @@
+message(STATUS "use ${x86_kernels}")
+message(STATUS "use ${ops_lite}")
+cc_library(bind_executor_lite SRCS executor_lite.cc)
+
 set(PYBIND_DEPS pybind python proto_desc memory executor async_executor fleet_wrapper nccl_wrapper prune
-  feed_fetch_method pass_builder parallel_executor profiler layer scope_pool scope_lite mir_passes kernel_lite op_lite optimizer_lite
+  feed_fetch_method pass_builder parallel_executor profiler layer scope_pool bind_executor_lite scope_lite ${ops_lite} ${host_kernels} ${x86_kernels} mir_passes kernel_lite op_lite optimizer_lite 
   tracer analysis_predictor imperative_profiler nccl_context)
 
 if(WITH_PYTHON)
   list(APPEND PYBIND_DEPS py_func_op)
 endif()
-set(PYBIND_SRCS pybind.cc exception.cc protobuf.cc const_value.cc recordio.cc reader_py.cc async_executor_py.cc fleet_wrapper_py.cc nccl_wrapper_py.cc data_set_py.cc imperative.cc ir.cc inference_api.cc executor_lite.cc)
+set(PYBIND_SRCS pybind.cc exception.cc protobuf.cc const_value.cc recordio.cc reader_py.cc async_executor_py.cc fleet_wrapper_py.cc nccl_wrapper_py.cc data_set_py.cc imperative.cc ir.cc inference_api.cc)
 
 if(WITH_PYTHON)
   if(WITH_AMD_GPU)

@@ -25,6 +25,7 @@ REGISTER_LITE_KERNEL(elementwise_sub, kX86, kFloat, kNCHW,
 REGISTER_LITE_KERNEL(elementwise_sub_grad, kX86, kFloat, kNCHW,
                      paddle::lite::kernels::x86::ElementwiseSubCompute<float>,
                      def)
+    .BindInput("Y", {LiteType::GetTensorTy(TARGET(kX86))})
     .BindInput(paddle::framework::GradVarName("Out"),
                {LiteType::GetTensorTy(TARGET(kX86))})
     .BindOutput(paddle::framework::GradVarName("X"),
