@@ -75,15 +75,13 @@ bool MulGradOpLite::CheckShape() const {
   CHECK_OR_FALSE(param_.x);
   CHECK_OR_FALSE(param_.y);
   CHECK_OR_FALSE(param_.output_grad);
-  CHECK_OR_FALSE(param_.x_grad);
-  CHECK_OR_FALSE(param_.y_grad);
 
   return true;
 }
 
 bool MulGradOpLite::InferShape() const {
-  param_.x_grad->Resize(param_.x->dims());
-  param_.y_grad->Resize(param_.y->dims());
+  if (param_.x_grad) param_.x_grad->Resize(param_.x->dims());
+  if (param_.y_grad) param_.y_grad->Resize(param_.y->dims());
   return true;
 }
 
@@ -96,6 +94,7 @@ bool MulGradOpLite::AttachImpl(const cpp::OpDesc &op_desc, lite::Scope *scope) {
     auto X_grad_name = op_desc.Output(framework::GradVarName("X")).front();
     param_.x_grad = GetMutableVar<lite::Tensor>(scope, X_grad_name);
   }
+
   if (op_desc.Output(framework::GradVarName("Y")).size()) {
     auto Y_grad_name = op_desc.Output(framework::GradVarName("Y")).front();
     param_.y_grad = GetMutableVar<lite::Tensor>(scope, Y_grad_name);
