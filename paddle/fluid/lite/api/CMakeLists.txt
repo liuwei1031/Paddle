@@ -113,6 +113,7 @@ if (WITH_TESTING)
     add_dependencies(test_paddle_api_lite test_apis_lite)
 endif()
 
+if (LITE_WITH_X86)
 lite_cc_binary(cxx_api_lite_bin SRCS cxx_api_bin.cc
     DEPS
     cxx_api_lite
@@ -122,4 +123,4 @@ lite_cc_binary(cxx_api_lite_bin SRCS cxx_api_bin.cc
     operator
     ${ops_lite} ${host_kernels}
     ARM_DEPS ${arm_kernels})
- 
+endif() 

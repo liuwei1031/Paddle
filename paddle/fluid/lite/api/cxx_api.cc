@@ -79,6 +79,7 @@ const lite::Tensor *Predictor::GetTensor(const std::string &name) const {
   return &var->Get<lite::Tensor>();
 }
 
+#ifdef LITE_WITH_X86
 void Predictor::FeedVars(const std::vector<framework::Tensor> &tensors) {
   auto var = scope_->FindVar("feed");
   auto &feed_list = *(var->GetMutable<std::vector<lite::Tensor>>());
@@ -87,6 +88,7 @@ void Predictor::FeedVars(const std::vector<framework::Tensor> &tensors) {
   for (size_t i = 0; i < tensors.size(); ++i)
     feed_list[i].ShareDataWith(tensors[i]);
 }
+#endif
 
 }  // namespace lite
 }  // namespace paddle

@@ -113,4 +113,6 @@ bool MulGradOpLite::AttachImpl(const cpp::OpDesc &op_desc, lite::Scope *scope) {
 }  // namespace paddle
 
 REGISTER_LITE_OP(mul, paddle::lite::operators::MulOpLite);
+#ifdef LITE_WITH_X86
 REGISTER_LITE_OP(mul_grad, paddle::lite::operators::MulGradOpLite);
+#endif

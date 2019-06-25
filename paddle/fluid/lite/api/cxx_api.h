@@ -54,11 +54,6 @@ class Predictor {
   // Run the predictor for a single batch of data.
   void Run() { program_->Run(); }
 
-  void Run(const std::vector<framework::Tensor>& tensors) {
-    FeedVars(tensors);
-    program_->Run();
-  }
-
   // Get offset-th col of feed inputs.
   lite::Tensor* GetInput(size_t offset);
 
@@ -72,7 +67,14 @@ class Predictor {
   // This method is disabled in mobile, for unnecessary dependencies required.
   void SaveModel(const std::string& dir);
 
+#ifdef LITE_WITH_X86
+  void Run(const std::vector<framework::Tensor>& tensors) {
+    FeedVars(tensors);
+    program_->Run();
+  }
+
   void FeedVars(const std::vector<framework::Tensor>& tensors);
+#endif
 
  private:
   Optimizer optimizer_;

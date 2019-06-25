@@ -30,8 +30,6 @@ class FeedCompute
     VLOG(4) << "feed_list.size: " << param.feed_list->size();
     VLOG(4) << "col " << param.col;
     const lite::Tensor &feed_item = (*param.feed_list)[param.col];
-    VLOG(4) << "feed item memory size : "
-            << feed_item.raw_tensor().memory_size();
     param.out->ShareDataWith(feed_item);
     VLOG(4) << "FEED input " << feed_item << " col " << param.col;
     VLOG(4) << "FEED output " << *param.out;
