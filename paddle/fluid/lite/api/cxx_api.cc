@@ -79,12 +79,9 @@ const lite::Tensor *Predictor::GetTensor(const std::string &name) const {
   return &var->Get<lite::Tensor>();
 }
 
-void Predictor::FeedVars(const std::vector<framework::Tensor>& tensors) {
+void Predictor::FeedVars(const std::vector<framework::Tensor> &tensors) {
   auto var = scope_->FindVar("feed");
-  auto& feed_list = *(var->GetMutable<std::vector<lite::Tensor>>());
-  VLOG(3) << "================= feed vars, tensors.size : " << tensors.size();
-  VLOG(3) << "================= feed vars, feed_list.size : "
-          << feed_list.size();
+  auto &feed_list = *(var->GetMutable<std::vector<lite::Tensor>>());
   feed_list.resize(tensors.size());
 
   for (size_t i = 0; i < tensors.size(); ++i)

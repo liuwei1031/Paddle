@@ -48,14 +48,13 @@ bool ElementwiseOp::AttachImpl(const cpp::OpDesc& opdesc, lite::Scope* scope) {
 bool ElementwiseGradExplicitOp::CheckShape() const {
   CHECK_OR_FALSE(param_.Y);
   CHECK_OR_FALSE(param_.X_grad);
-  CHECK_OR_FALSE(param_.Y_grad);
   CHECK_OR_FALSE(param_.Out_grad);
   return true;
 }
 
 bool ElementwiseGradExplicitOp::InferShape() const {
   param_.X_grad->Resize(param_.Out_grad->dims());
-  param_.Y_grad->Resize(param_.Y->dims());
+  if (param_.Y_grad) param_.Y_grad->Resize(param_.Y->dims());
   return true;
 }
 

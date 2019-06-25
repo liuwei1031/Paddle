@@ -22,9 +22,18 @@ REGISTER_LITE_KERNEL(elementwise_sub, kX86, kFloat, kNCHW,
     .BindOutput("Out", {LiteType::GetTensorTy(TARGET(kX86))})
     .Finalize();
 
-REGISTER_LITE_KERNEL(elementwise_sub_grad, kX86, kFloat, kNCHW,
-                     paddle::lite::kernels::x86::ElementwiseSubCompute<float>,
+REGISTER_LITE_KERNEL(elementwise_add, kX86, kFloat, kNCHW,
+                     paddle::lite::kernels::x86::ElementwiseAddCompute<float>,
                      def)
+    .BindInput("X", {LiteType::GetTensorTy(TARGET(kX86))})
+    .BindInput("Y", {LiteType::GetTensorTy(TARGET(kX86))})
+    .BindOutput("Out", {LiteType::GetTensorTy(TARGET(kX86))})
+    .Finalize();
+
+#ifdef LITE_WITH_X86
+REGISTER_LITE_KERNEL(
+    elementwise_sub_grad, kX86, kFloat, kNCHW,
+    paddle::lite::kernels::x86::ElementwiseSubGradCompute<float>, def)
     .BindInput("Y", {LiteType::GetTensorTy(TARGET(kX86))})
     .BindInput(paddle::framework::GradVarName("Out"),
                {LiteType::GetTensorTy(TARGET(kX86))})
@@ -33,11 +42,4 @@ REGISTER_LITE_KERNEL(elementwise_sub_grad, kX86, kFloat, kNCHW,
     .BindOutput(paddle::framework::GradVarName("Y"),
                 {LiteType::GetTensorTy(TARGET(kX86))})
     .Finalize();
-
-REGISTER_LITE_KERNEL(elementwise_add, kX86, kFloat, kNCHW,
-                     paddle::lite::kernels::x86::ElementwiseAddCompute<float>,
-                     def)
-    .BindInput("X", {LiteType::GetTensorTy(TARGET(kX86))})
-    .BindInput("Y", {LiteType::GetTensorTy(TARGET(kX86))})
-    .BindOutput("Out", {LiteType::GetTensorTy(TARGET(kX86))})
-    .Finalize();
+#endif

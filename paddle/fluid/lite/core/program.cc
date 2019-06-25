@@ -85,11 +85,11 @@ void Program::PrepareWorkspace(const framework::proto::ProgramDesc &program) {
   CHECK(!exec_scope_) << "Duplicate PrepareWorkspace found";
   exec_scope_ = &scope_->NewScope();
   // Create Feed and Fetch var.
-  // scope_->Var("feed")->GetMutable<std::vector<lite::Tensor>>();
-  // scope_->Var("fetch")->GetMutable<std::vector<lite::Tensor>>();
+  scope_->Var("feed")->GetMutable<std::vector<lite::Tensor>>();
+  scope_->Var("fetch")->GetMutable<std::vector<lite::Tensor>>();
 
-  // tmp_vars_.push_back("feed");
-  // tmp_vars_.push_back("fetch");
+  tmp_vars_.push_back("feed");
+  tmp_vars_.push_back("fetch");
   CHECK(!program.blocks().empty());
   for (auto proto_var_desc : program.blocks(0).vars()) {
     lite::VarDesc var_desc(proto_var_desc);

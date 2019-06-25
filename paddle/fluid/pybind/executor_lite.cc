@@ -18,7 +18,7 @@ limitations under the License. */
 #include <vector>
 #include "paddle/fluid/lite/api/cxx_api.h"
 #include "paddle/fluid/lite/core/hvy_tensor.h"
-#include "paddle/fluid/lite/core/mir/passes.h"
+#include "paddle/fluid/lite/core/mir/use_passes.h"
 #include "paddle/fluid/lite/core/scope.h"
 #include "pybind11/pybind11.h"
 
@@ -67,19 +67,19 @@ void BindScope(pybind11::module* m) {
 }
 
 void BindExecutorLite(pybind11::module* m) {
-  py::class_<lt::ExecutorLite>(*m, "ExecutorLite")
+  py::class_<lt::Predictor>(*m, "Predictor")
       .def(pybind11::init<>())
       .def("__init__",
-           [](lt::ExecutorLite& self,
+           [](lt::Predictor& self,
               const std::shared_ptr<lt::Scope>& root_scope) {
-             new (&self) lt::ExecutorLite(root_scope);
+             new (&self) lt::Predictor(root_scope);
            })
-      .def("get_input", &lt::ExecutorLite::GetInput,
+      .def("get_input", &lt::Predictor::GetInput,
            pybind11::return_value_policy::reference)
-      .def("get_output", &lt::ExecutorLite::GetOutput,
+      .def("get_output", &lt::Predictor::GetOutput,
            pybind11::return_value_policy::reference)
-      .def("run", [](lt::ExecutorLite& self) { self.Run(); })
-      .def("run", [](lt::ExecutorLite& self,
+      .def("run", [](lt::Predictor& self) { self.Run(); })
+      .def("run", [](lt::Predictor& self,
                      const std::vector<framework::Tensor>& tensors) {
         self.Run(tensors);
       });
@@ -138,7 +138,7 @@ void BindCXXTrainer(pybind11::module* m) {
           })
       .def("build_main_program_executor",
            [](lt::CXXTrainer& self,
-              framework::ProgramDesc& desc) -> lt::ExecutorLite& {
+              framework::ProgramDesc& desc) -> lt::Predictor& {
              return self.BuildMainProgramExecutor(desc);
            },
            pybind11::return_value_policy::reference)
@@ -174,6 +174,7 @@ USE_LITE_OP(square);
 USE_LITE_OP(sgd);
 
 USE_LITE_KERNEL(feed, kHost, kAny, kAny, def);
+USE_LITE_KERNEL(fetch, kHost, kAny, kAny, def);
 
 #ifdef LITE_WITH_X86
 USE_LITE_KERNEL(uniform_random, kX86, kFloat, kNCHW, def);

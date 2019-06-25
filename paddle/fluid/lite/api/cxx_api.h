@@ -106,15 +106,13 @@ class CXXTrainer {
   // Build the RuntimeProgram cache for the main program. The cache will run
   // multiple times for the epoches.
   // NOTE Just support to execute the 0-th block currently.
-  ExecutorLite& BuildMainProgramExecutor(
-      const framework::proto::ProgramDesc& desc, int block_id = 0) {
-    scope_->Var("feed")->GetMutable<std::vector<lite::Tensor>>();
-    main_program_executor_.Build(desc, preferred_place_, valid_places_, true);
+  Predictor& BuildMainProgramExecutor(const framework::proto::ProgramDesc& desc,
+                                      int block_id = 0) {
+    main_program_executor_.Build(desc, preferred_place_, valid_places_);
     return main_program_executor_;
   }
 
-  ExecutorLite& BuildMainProgramExecutor(
-      framework::ProgramDesc& desc) {  // NOLINT
+  Predictor& BuildMainProgramExecutor(framework::ProgramDesc& desc) {  // NOLINT
     return BuildMainProgramExecutor(*desc.Proto());
   }
 
