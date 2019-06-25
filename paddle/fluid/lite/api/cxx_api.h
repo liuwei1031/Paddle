@@ -24,6 +24,10 @@
 #include "paddle/fluid/lite/core/types.h"
 #include "paddle/fluid/lite/model_parser/model_parser.h"
 
+#ifdef LITE_WITH_X86
+#include "paddle/fluid/framework/program_desc.h"
+#endif
+
 namespace paddle {
 namespace lite {
 
@@ -112,6 +116,7 @@ class CXXTrainer {
     return main_program_executor_;
   }
 
+#ifdef LITE_WITH_X86
   Predictor& BuildMainProgramExecutor(framework::ProgramDesc& desc) {  // NOLINT
     return BuildMainProgramExecutor(*desc.Proto());
   }
@@ -119,6 +124,7 @@ class CXXTrainer {
   void RunStartupProgram(framework::ProgramDesc& desc) {  // NOLINT
     RunStartupProgram(*desc.Proto());
   }
+#endif
 
   // Run the startup program. It just executes once, no cache needed.
   void RunStartupProgram(const framework::proto::ProgramDesc& desc,

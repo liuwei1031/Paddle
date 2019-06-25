@@ -17,8 +17,8 @@ limitations under the License. */
 #include <memory>
 #include <vector>
 #include "paddle/fluid/lite/api/cxx_api.h"
+#include "paddle/fluid/lite/api/paddle_use_passes.h"
 #include "paddle/fluid/lite/core/hvy_tensor.h"
-#include "paddle/fluid/lite/core/mir/use_passes.h"
 #include "paddle/fluid/lite/core/scope.h"
 #include "pybind11/pybind11.h"
 
