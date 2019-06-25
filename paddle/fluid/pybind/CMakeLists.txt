@@ -1,6 +1,6 @@
 message(STATUS "use ${x86_kernels}")
 message(STATUS "use ${ops_lite}")
-cc_library(bind_executor_lite SRCS executor_lite.cc)
+cc_library(bind_executor_lite SRCS executor_lite.cc DEPS pybind framework_proto)
 
 set(PYBIND_DEPS pybind python proto_desc memory executor async_executor fleet_wrapper nccl_wrapper prune
   feed_fetch_method pass_builder parallel_executor profiler layer scope_pool bind_executor_lite cxx_api_lite scope_lite ${ops_lite} ${host_kernels} ${x86_kernels} mir_passes kernel_lite op_lite optimizer_lite 
