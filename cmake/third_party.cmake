@@ -291,4 +291,4 @@ add_custom_target(third_party DEPENDS ${third_party_deps})
 # integrate abseil-cpp
 execute_process(COMMAND git submodule init
                 COMMAND git submodule update)
-
+add_subdirectory(abseil-cpp)
